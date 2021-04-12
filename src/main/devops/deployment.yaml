@@ -1,30 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy-eureka-authentication
+  name: ${SVC_NAME}
   labels:
-    service: eureka-authentication
     app: hogarep
+    type: backend
+    consume: db
+    db: mongo
   namespace: default
 spec:
   selector:
     matchLabels:
-      service: eureka-authentication
-      bd: mongo
+      service: ${SVC_NAME}
+      type: backend
   template:
     metadata:
-      name: eureka-main-svc
+      name: ${SVC_NAME}
       labels:
-        service: eureka-authentication
-        bd: mongo
+        service: ${SVC_NAME}
+        type: backend
     spec:
       containers:
-        - name: eureka-authentication
+        - name: ${SVC_NAME}
           image: ${SVC_IMAGE}
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-              name: container-port
+              name: port-${SVC_NAME}
           resources:
             requests:
               cpu: 40m

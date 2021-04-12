@@ -1,9 +1,3 @@
 spring:
-  application:
-    name: cm-eureka-authentication
-  cloud:
-    kubernetes:
-      config:
-        name: cm-eureka-authentication
   profiles:
     active: dev
