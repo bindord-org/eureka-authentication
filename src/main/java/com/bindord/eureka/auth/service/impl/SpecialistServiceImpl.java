@@ -6,6 +6,7 @@ import com.bindord.eureka.auth.service.SpecialistService;
 import com.bindord.eureka.auth.service.base.UserCredential;
 import com.bindord.eureka.auth.wsc.KeycloakClientConfiguration;
 import com.bindord.eureka.auth.wsc.ResourceServerClientConfiguration;
+import com.bindord.keycloak.auth.model.UserRepresentation;
 import com.bindord.resourceserver.model.Specialist;
 import com.bindord.resourceserver.model.SpecialistCv;
 import com.bindord.resourceserver.model.SpecialistCvDto;
@@ -21,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 import java.util.UUID;
@@ -65,7 +67,8 @@ public class SpecialistServiceImpl extends UserCredential implements SpecialistS
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(Boolean.class);
+                .bodyToMono(Boolean.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @SneakyThrows
@@ -77,7 +80,8 @@ public class SpecialistServiceImpl extends UserCredential implements SpecialistS
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(specialist), SpecialistDto.class)
                 .retrieve()
-                .bodyToMono(Specialist.class);
+                .bodyToMono(Specialist.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @SneakyThrows
@@ -97,7 +101,8 @@ public class SpecialistServiceImpl extends UserCredential implements SpecialistS
                 ), new ParameterizedTypeReference<>() {
                 })
                 .retrieve()
-                .bodyToFlux(SpecialistSpecialization.class);
+                .bodyToFlux(SpecialistSpecialization.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @SneakyThrows
@@ -117,7 +122,8 @@ public class SpecialistServiceImpl extends UserCredential implements SpecialistS
                 ), new ParameterizedTypeReference<>() {
                 })
                 .retrieve()
-                .bodyToFlux(WorkLocation.class);
+                .bodyToFlux(WorkLocation.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     private Mono<SpecialistCv> doRegisterSpecialistCv(SpecialistCvDto specialistCvDto, Specialist specialist) {
@@ -129,6 +135,7 @@ public class SpecialistServiceImpl extends UserCredential implements SpecialistS
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(specialistCvDto), SpecialistCvDto.class)
                 .retrieve()
-                .bodyToMono(SpecialistCv.class);
+                .bodyToMono(SpecialistCv.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 }

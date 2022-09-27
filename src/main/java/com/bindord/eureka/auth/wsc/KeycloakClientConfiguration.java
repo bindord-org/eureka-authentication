@@ -20,7 +20,6 @@ public class KeycloakClientConfiguration extends BaseClientConfiguration {
     public WebClient init() {
         ClientProperties.ClientConfig config = clientProperties.getKeycloakAuth();
         ClientHttpConnector connector = this.instanceBaseConfig(config);
-
         return webClientBuilder
                 .baseUrl(config.getUrl())
                 .clientConnector(connector)

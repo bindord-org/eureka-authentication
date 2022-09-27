@@ -5,6 +5,7 @@ import com.bindord.keycloak.auth.model.UserLogin;
 import com.bindord.keycloak.auth.model.UserRepresentation;
 import org.springframework.http.MediaType;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 public class UserCredential {
 
@@ -21,6 +22,7 @@ public class UserCredential {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(userLogin), UserLogin.class)
                 .retrieve()
-                .bodyToMono(UserRepresentation.class);
+                .bodyToMono(UserRepresentation.class)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 }
